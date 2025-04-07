@@ -12,10 +12,10 @@ struct FAttackMontageInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UAnimMontage > AttackMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Damage;
+	TObjectPtr<UAnimMontage> AttackMontage = nullptr; // ! 포인터는 nullptr로 초기화
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Damage = .0f; // ! 변수를 선언할 때는 웬만해서 초기화
 };
 
 UCLASS()
@@ -23,29 +23,20 @@ class P_XR_API AMonsterBase : public ACharacter
 {
 	GENERATED_BODY() // 병신
 
-
 public:
-	// Sets default values for this character's properties
 	AMonsterBase();
 
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray <FAttackMontageInfo> AttackMontages; // TArray가 언리얼에서 쓰는 배열 특화?, TMap은 언리얼에서 쓰는 자료구조 맵
+	TArray<FAttackMontageInfo> AttackMontages; // TArray가 언리얼에서 쓰는 배열 특화?, TMap은 언리얼에서 쓰는 자료구조 맵
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
-
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
 
 };
