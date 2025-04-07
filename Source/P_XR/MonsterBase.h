@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AttackTargetActor.h"
 #include "MonsterBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -35,6 +36,30 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	/** Monster Status **/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MonsterRank = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Health = 100.f;
+	/** end Moster Status **/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MonsterWidth = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MonsterHeight_Head = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MonsterHeight_Chest = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MonsterHeight_Leg = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AAttackTargetActor> AttackTargetClass;
+
+	// 피해적용 함수를 위한 예?시
+	UFUNCTION(BlueprintCallable)
+	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage);
 
 protected:
 	virtual void BeginPlay() override;
