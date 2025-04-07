@@ -7,6 +7,18 @@
 #include "P_XR/Data/WeaponData.h"
 #include "WeaponBase.generated.h"
 
+USTRUCT(BlueprintType)
+struct FMonsterToAttackTargets
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AActor* Monster = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<AActor*> AttackTargets;
+};
+
 UCLASS(BlueprintType)
 class P_XR_API AWeaponBase : public AActor
 {
@@ -41,4 +53,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UWeaponData> WeaponData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FMonsterToAttackTargets> MonsterToAttackTargetsList;
 };

@@ -11,6 +11,32 @@ AMonsterBase::AMonsterBase()
 	WeaponMesh->SetupAttachment(GetMesh(), FName("HandSocket")); // 웨폰을 손 소켓에 넣는다
 }
 
+AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage)
+{
+	int32 rRank = WeaponRank - MonsterRank;
+	rRank = FMath::Max(0, rRank);
+	rRank = FMath::Min(rRank, 5);
+
+	if (AttackTargetClass && GetWorld())
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		AAttackTargetActor* SpawnedAttackTarget = GetWorld()
+			->SpawnActor<AAttackTargetActor>(AttackTargetClass, SpawnLoc, SpawnRot, SpawnParams);
+
+		if (SpawnedAttackTarget)
+		{
+			SpawnedAttackTarget->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
+			SpawnedAttackTarget->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+			SpawnedAttackTarget->SetAttackTargetRank(this, rRank, WeaponDamage);
+			SpawnedAttackTarget->Monster = this;
+			return SpawnedAttackTarget;
+		}
+	}
+	return nullptr;
+}
+
 void AMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
