@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AttackTargetActor.h"
+#include "P_XR/Data/MonsterData.h"
 #include "MonsterBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -36,6 +37,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FName MonsterName = FName();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UMonsterData> MonsterData;
 
 	/** Monster Status **/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
