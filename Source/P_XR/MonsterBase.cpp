@@ -2,6 +2,7 @@
 
 
 #include "MonsterBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AMonsterBase::AMonsterBase()
 {
@@ -45,6 +46,8 @@ AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRo
 void AMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 	
 }
 
