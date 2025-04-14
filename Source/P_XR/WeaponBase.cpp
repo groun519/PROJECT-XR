@@ -9,6 +9,13 @@ AWeaponBase::AWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
+	//WeaponMesh->SetupAttachment(TargetFinder);
+	RootComponent = WeaponMesh;
+
+	TargetFinder = CreateDefaultSubobject<USphereComponent>(TEXT("TargetFinder"));
+	TargetFinder->SetSphereRadius(1000.0f);
+	TargetFinder->SetupAttachment(WeaponMesh);
 }
 
 // Called when the game starts or when spawned
@@ -25,10 +32,18 @@ void AWeaponBase::Tick(float DeltaTime)
 
 }
 
-void AWeaponBase::SetWeaponData(float _Damage, float _TargetSpawnFrequency, int32 _WeaponRank)
+void AWeaponBase::SetWeaponData(float _Damage, float _TargetSpawnFrequency, int32 _WeaponRank, USkeletalMesh* _WeaponMesh, FTransform Offset)
 {
 	Damage = _Damage;
 	TargetSpawnFrequency = _TargetSpawnFrequency;
 	WeaponRank = _WeaponRank;
+
+	if (WeaponMesh)
+	{
+		WeaponMesh->SetSkeletalMesh(_WeaponMesh);
+		WeaponMesh->AddLocalOffset(Offset.GetLocation());
+		WeaponMesh->SetRelativeRotation(Offset.GetRotation());
+		WeaponMesh->SetWorldScale3D(Offset.GetScale3D());
+	}
 }
 
