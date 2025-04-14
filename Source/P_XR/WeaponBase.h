@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "P_XR/Data/WeaponData.h"
+#include "Components/SphereComponent.h"
 #include "WeaponBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -25,15 +26,18 @@ class P_XR_API AWeaponBase : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AWeaponBase();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<USphereComponent> TargetFinder;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -49,7 +53,7 @@ public:
 	int32 WeaponRank = 0;
 
 	UFUNCTION(BlueprintCallable)
-	void SetWeaponData(float _Damage, float _TargetSpawnFrequency, int32 _WeaponRank);
+	void SetWeaponData(float _Damage, float _TargetSpawnFrequency, int32 _WeaponRank, USkeletalMesh* _WeaponMesh, FTransform Offset);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UWeaponData> WeaponData;
