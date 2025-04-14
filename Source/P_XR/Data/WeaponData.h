@@ -36,11 +36,11 @@ struct FWeaponInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponData")
 	int32 WeaponRank = 0;
 
-	/*UPROPERTY(EditAnywhere, Category = "WeaponData")
-	EWeaponType WeaponType = EWeaponType();*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponData")
+	USkeletalMesh* WeaponMesh = nullptr;
 
-	/*UPROPERTY(EditAnywhere, Category = "WeaponData")
-	USkeletalMesh* WeaponMesh = nullptr;*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponData")
+	FTransform WeaponOffset = FTransform();
 };
 
 /**
