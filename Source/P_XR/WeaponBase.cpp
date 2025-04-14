@@ -41,7 +41,9 @@ void AWeaponBase::SetWeaponData(float _Damage, float _TargetSpawnFrequency, int3
 	if (WeaponMesh)
 	{
 		WeaponMesh->SetSkeletalMesh(_WeaponMesh);
-		WeaponMesh->SetRelativeTransform(Offset);
+		WeaponMesh->AddLocalOffset(Offset.GetLocation());
+		WeaponMesh->SetRelativeRotation(Offset.GetRotation());
+		WeaponMesh->SetWorldScale3D(Offset.GetScale3D());
 	}
 }
 
