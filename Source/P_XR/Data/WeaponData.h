@@ -37,7 +37,7 @@ struct FWeaponInfo
 	int32 WeaponRank = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponData")
-	USkeletalMesh* WeaponMesh = nullptr;
+	UStaticMesh* WeaponMesh = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponData")
 	FTransform WeaponOffset = FTransform();
