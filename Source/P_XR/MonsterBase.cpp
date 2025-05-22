@@ -8,7 +8,7 @@ AMonsterBase::AMonsterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh")); // BP_MonsterBase에 쓰기위해 썼다
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh")); // BP_MonsterBase에 쓰기위해 썼다
 	WeaponMesh->SetupAttachment(GetMesh(), FName("HandSocket")); // 웨폰을 손 소켓에 넣는다
 }
 

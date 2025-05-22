@@ -36,7 +36,7 @@ public:
 	TArray<FAttackMontageInfo> AttackMontages; // TArray가 언리얼에서 쓰는 배열 특화?, TMap은 언리얼에서 쓰는 자료구조 맵
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FName MonsterName = FName();
