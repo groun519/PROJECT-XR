@@ -3,13 +3,16 @@
 
 #include "MonsterBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MonsterAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 AMonsterBase::AMonsterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh")); // BP_MonsterBase에 쓰기위해 썼다
-	WeaponMesh->SetupAttachment(GetMesh(), FName("HandSocket")); // 웨폰을 손 소켓에 넣는다
+	WeaponMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh")); // BP_MonsterBase에 쓰기위해 썼다
+	WeaponMeshComp->SetupAttachment(GetMesh(), FName("HandSocket")); // 웨폰을 손 소켓에 넣는다
 }
 
 AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName)
@@ -55,6 +58,16 @@ void AMonsterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AMonsterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority()) return;
+	MonsterAIController = Cast<AMonsterAIController>(NewController);
+	MonsterAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	MonsterAIController->RunBehaviorTree(BehaviorTree);
 }
 
 void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

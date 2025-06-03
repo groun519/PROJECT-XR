@@ -8,6 +8,9 @@
 #include "P_XR/Data/MonsterData.h"
 #include "MonsterBase.generated.h"
 
+class UBehaviorTree;
+class AMonsterAIController;
+
 USTRUCT(BlueprintType)
 struct FAttackMontageInfo
 {
@@ -17,7 +20,31 @@ struct FAttackMontageInfo
 	TObjectPtr<UAnimMontage> AttackMontage = nullptr; // ! 포인터는 nullptr로 초기화
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Damage = .0f; // ! 변수를 선언할 때는 웬만해서 초기화
+	TObjectPtr<AActor> Projectile = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DamageCoeff = .0f; // ! 변수를 선언할 때는 웬만해서x "꼭" 초기화
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Cooltime = .0f;
+};
+
+USTRUCT(BlueprintType)
+struct FSkillMontageInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UAnimMontage> SkillMontage = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<AActor> Projectile = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DamageCoeff = .0f; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CooldownCount = 0;
 };
 
 UCLASS()
@@ -29,14 +56,18 @@ public:
 	AMonsterBase();
 
 	virtual void Tick(float DeltaTime) override;
+	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FAttackMontageInfo> AttackMontages; // TArray가 언리얼에서 쓰는 배열 특화?, TMap은 언리얼에서 쓰는 자료구조 맵
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FSkillMontageInfo> SkillMontages;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+	TObjectPtr<UStaticMeshComponent> WeaponMeshComp;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FName MonsterName = FName();
@@ -47,6 +78,12 @@ public:
 	/** Monster Status **/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 MonsterRank = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float BaseDamage = 10.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentDamage = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Health = 100.f;
@@ -70,5 +107,11 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<AMonsterAIController> MonsterAIController;
 
 };

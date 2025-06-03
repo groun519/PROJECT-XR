@@ -32,7 +32,7 @@ public:
 	TObjectPtr<USphereComponent> TargetFinder;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
 protected:
 	virtual void BeginPlay() override;
@@ -53,7 +53,7 @@ public:
 	int32 WeaponRank = 0;
 
 	UFUNCTION(BlueprintCallable)
-	void SetWeaponData(float _Damage, float _TargetSpawnFrequency, int32 _WeaponRank, USkeletalMesh* _WeaponMesh, FTransform Offset);
+	void SetWeaponData(float _Damage, float _TargetSpawnFrequency, int32 _WeaponRank, UStaticMesh* _WeaponMesh, FTransform Offset);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WeaponData")
 	TObjectPtr<UWeaponData> WeaponData;
