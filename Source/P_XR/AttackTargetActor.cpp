@@ -44,6 +44,7 @@ void AAttackTargetActor::SetAttackTargetRank(AActor* TargetMonster, int32 rRank,
 		// Rank 3 : 180%
 		// Rank 4 : 230%
 		// Rank 5 : 310%
+		// Rank 6 : 440%
 		// 
 		// 그러니 좋은 무기를 사용해야 한다!
 		// 

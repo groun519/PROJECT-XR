@@ -66,7 +66,7 @@ public:
 
 	// 피해적용 함수를 위한 예?시
 	UFUNCTION(BlueprintCallable)
-	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage);
+	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName);
 
 protected:
 	virtual void BeginPlay() override;
