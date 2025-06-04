@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MonsterBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -11,15 +10,39 @@ AMonsterBase::AMonsterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	WeaponMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh")); // BP_MonsterBase�� �������� ���
-	WeaponMeshComp->SetupAttachment(GetMesh(), FName("HandSocket")); // ������ �� ���Ͽ� �ִ´�
+	WeaponMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	WeaponMeshComp->SetupAttachment(GetMesh(), FName("HandSocket"));
+}
+
+void AMonsterBase::BeginPlay()
+{
+	Super::BeginPlay();
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+}
+
+void AMonsterBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void AMonsterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority()) return;
+	MonsterAIController = Cast<AMonsterAIController>(NewController);
+	if (MonsterAIController && BehaviorTree)
+	{
+		MonsterAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+		MonsterAIController->RunBehaviorTree(BehaviorTree);
+	}
 }
 
 AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName)
 {
 	int32 rRank = WeaponRank - MonsterRank;
-	rRank = FMath::Max(0, rRank);
-	rRank = FMath::Min(rRank, 5);
+	rRank = FMath::Clamp(rRank, 0, 5);
 
 	if (bIsBackAttack)
 	{
@@ -36,43 +59,49 @@ AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRo
 
 		if (SpawnedAttackTarget)
 		{
-			SpawnedAttackTarget->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
+			SpawnedAttackTarget->SetActorScale3D(FVector(0.2f));
 			SpawnedAttackTarget->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, AttachSocketName);
 			SpawnedAttackTarget->SetAttackTargetRank(this, rRank, WeaponDamage);
 			SpawnedAttackTarget->Monster = this;
+
+			// ✅ 절단 조건 처리 (예: 강한 공격이면 절단)
+			if (rRank >= 4)
+			{
+				SliceByBone(FName("spine_01"));
+			}
+
 			return SpawnedAttackTarget;
 		}
 	}
 	return nullptr;
 }
 
-void AMonsterBase::BeginPlay()
+void AMonsterBase::SliceByBone(FName BoneName)
 {
-	Super::BeginPlay();
-	bUseControllerRotationYaw = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	
-}
+	if (!GetMesh()) return;
 
-void AMonsterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	// 1. 숨김 처리
+	GetMesh()->HideBoneByName(BoneName, EPhysBodyOp::PBO_None);
 
-}
+	// 2. 절단 위치
+	const FVector BoneLocation = GetMesh()->GetBoneLocation(BoneName);
+	const FRotator BoneRotation = GetMesh()->GetBoneQuaternion(BoneName).Rotator();
 
-void AMonsterBase::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
+	// 3. 조각 메시 스폰 (위쪽 절단 파츠)
+	if (SlicedPartActorClass && GetWorld())
+	{
+		FActorSpawnParameters Params;
+		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	if (!HasAuthority()) return;
-	MonsterAIController = Cast<AMonsterAIController>(NewController);
-	MonsterAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
-	MonsterAIController->RunBehaviorTree(BehaviorTree);
-}
+		AActor* UpperPart = GetWorld()->SpawnActor<AActor>(SlicedPartActorClass, BoneLocation, BoneRotation, Params);
+		if (UpperPart)
+		{
+			UpperPart->SetActorScale3D(GetActorScale3D());
 
-void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+			// ✅ 정교하게 붙이려면 Bone의 Forward 방향으로 약간 이동도 고려 가능
+			// FVector AdjustedLoc = BoneLocation + GetActorForwardVector() * 10.f;
+			// UpperPart->SetActorLocation(AdjustedLoc);
+		}
+	}
 }
 
