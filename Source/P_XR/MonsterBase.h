@@ -20,7 +20,7 @@ struct FAttackMontageInfo
 	TObjectPtr<UAnimMontage> AttackMontage = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<AActor> Projectile = nullptr;
+	TSubclassOf<AActor> Projectile = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DamageCoeff = .0f;
@@ -38,7 +38,7 @@ struct FSkillMontageInfo
 	TObjectPtr<UAnimMontage> SkillMontage = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<AActor> Projectile = nullptr;
+	TSubclassOf<AActor> Projectile = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DamageCoeff = .0f;
