@@ -56,7 +56,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "ModelingToolsEditorMode",
+			"Name": "FieldSystemPlugin",
 			"Enabled": true
 		}
 	],
