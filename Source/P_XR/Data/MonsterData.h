@@ -51,6 +51,9 @@ struct FMonsterInfo
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
 	FAttackTargetInfo LastBone;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
+	TObjectPtr<UStaticMesh> SlicingMesh = nullptr;
+
 	/*----------------------------------------------------------------------------*/
 
 	// 조건부 표시용
