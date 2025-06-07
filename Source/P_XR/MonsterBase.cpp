@@ -39,7 +39,7 @@ void AMonsterBase::PossessedBy(AController* NewController)
 	}
 }
 
-AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, float AttackTargetDamage, FName AttachSocketName)
+AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, FName AttachSocketName)
 {
 	int32 rRank = AttackTargetRank;
 	rRank = FMath::Clamp(rRank, 0, 6);
@@ -56,7 +56,7 @@ AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRo
 		{
 			SpawnedAttackTarget->SetActorScale3D(FVector(0.2f));
 			SpawnedAttackTarget->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, AttachSocketName);
-			SpawnedAttackTarget->SetAttackTargetRank(this, rRank, AttackTargetDamage);
+			SpawnedAttackTarget->SetAttackTargetRank(this, rRank);
 			SpawnedAttackTarget->Monster = this;
 
 			AttackTargetList.Add(SpawnedAttackTarget);

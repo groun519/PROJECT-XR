@@ -95,7 +95,7 @@ public:
 	TSubclassOf<AAttackTargetActor> AttackTargetClass;
 
 	UFUNCTION(BlueprintCallable)
-	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, float AttackTargetDamage, FName AttachSocketName);
+	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, FName AttachSocketName);
 
 	UFUNCTION(BlueprintCallable)
 	void SliceByBone(FName BoneName);
