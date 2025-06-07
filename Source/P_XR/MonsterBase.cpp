@@ -39,15 +39,10 @@ void AMonsterBase::PossessedBy(AController* NewController)
 	}
 }
 
-AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName)
+AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, float AttackTargetDamage, FName AttachSocketName)
 {
-	int32 rRank = WeaponRank - MonsterRank;
-	rRank = FMath::Clamp(rRank, 0, 5);
-
-	if (bIsBackAttack)
-	{
-		rRank = 6;
-	}
+	int32 rRank = AttackTargetRank;
+	rRank = FMath::Clamp(rRank, 0, 6);
 
 	if (AttackTargetClass && GetWorld())
 	{
@@ -61,14 +56,11 @@ AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRo
 		{
 			SpawnedAttackTarget->SetActorScale3D(FVector(0.2f));
 			SpawnedAttackTarget->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, AttachSocketName);
-			SpawnedAttackTarget->SetAttackTargetRank(this, rRank, WeaponDamage);
+			SpawnedAttackTarget->SetAttackTargetRank(this, rRank, AttackTargetDamage);
 			SpawnedAttackTarget->Monster = this;
 
-			// ✅ 절단 조건 처리 (예: 강한 공격이면 절단)
-			if (rRank >= 4)
-			{
-				SliceByBone(FName("spine_01"));
-			}
+			AttackTargetList.Add(SpawnedAttackTarget);
+			HavingTargetNum++;
 
 			return SpawnedAttackTarget;
 		}
