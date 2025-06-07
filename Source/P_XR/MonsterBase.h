@@ -79,7 +79,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BaseDamage = 10.f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentDamage = 0.f;
 
@@ -87,22 +86,16 @@ public:
 	float Health = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterWidth = 0;
+	TArray<TObjectPtr<AAttackTargetActor>> AttackTargetList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterHeight_Head = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterHeight_Chest = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterHeight_Leg = 0;
+	int32 HavingTargetNum = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AAttackTargetActor> AttackTargetClass;
 
 	UFUNCTION(BlueprintCallable)
-	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName);
+	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, float AttackTargetDamage, FName AttachSocketName);
 
 	UFUNCTION(BlueprintCallable)
 	void SliceByBone(FName BoneName);
