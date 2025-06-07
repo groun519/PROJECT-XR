@@ -47,6 +47,18 @@ struct FSkillMontageInfo
 	int32 CooldownCount = 0;
 };
 
+USTRUCT(BlueprintType)
+struct FAttackTargetList
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName BoneName = FName();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Rank = 0;
+};
+
 UCLASS()
 class P_XR_API AMonsterBase : public ACharacter
 {
@@ -75,15 +87,19 @@ public:
 	TObjectPtr<UMonsterData> MonsterData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MonsterRank = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BaseDamage = 10.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentDamage = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHealth = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Health = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FAttackTargetList> TargetBones;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FAttackTargetList LastTargetBone;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<TObjectPtr<AAttackTargetActor>> AttackTargetList;
@@ -99,6 +115,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SliceByBone(FName BoneName);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMonsterData(float _BaseDamage, float _MaxHealth);
 
 protected:
 	virtual void BeginPlay() override;

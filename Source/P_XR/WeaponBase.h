@@ -27,9 +27,6 @@ public:
 	AWeaponBase();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TObjectPtr<USphereComponent> TargetFinder;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
 protected:

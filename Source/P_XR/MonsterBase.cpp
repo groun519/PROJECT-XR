@@ -97,3 +97,10 @@ void AMonsterBase::SliceByBone(FName BoneName)
 	}
 }
 
+void AMonsterBase::SetMonsterData(float _BaseDamage, float _MaxHealth)
+{
+	BaseDamage = _BaseDamage;
+	MaxHealth = _MaxHealth;
+	Health = MaxHealth;
+}
+

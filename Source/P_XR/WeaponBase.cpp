@@ -10,22 +10,12 @@ AWeaponBase::AWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
 	RootComponent = WeaponMesh;
-
-	TargetFinder = CreateDefaultSubobject<USphereComponent>(TEXT("TargetFinder"));
-	TargetFinder->SetSphereRadius(1000.0f);
-	TargetFinder->SetupAttachment(WeaponMesh);
 }
 
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ✅ 오버랩 이벤트 바인딩
-	if (TargetFinder)
-	{
-		TargetFinder->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnOverlapBegin);
-	}
 }
 
 // Called every frame
