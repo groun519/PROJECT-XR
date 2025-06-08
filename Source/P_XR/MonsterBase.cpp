@@ -39,10 +39,15 @@ void AMonsterBase::PossessedBy(AController* NewController)
 	}
 }
 
-AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, FName AttachSocketName)
+AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName)
 {
-	int32 rRank = AttackTargetRank;
-	rRank = FMath::Clamp(rRank, 0, 6);
+	int32 rRank = WeaponRank - MonsterRank;
+	rRank = FMath::Clamp(rRank, 0, 5);
+
+	if (bIsBackAttack)
+	{
+		rRank = 6;
+	}
 
 	if (AttackTargetClass && GetWorld())
 	{
@@ -56,11 +61,14 @@ AActor* AMonsterBase::SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRo
 		{
 			SpawnedAttackTarget->SetActorScale3D(FVector(0.2f));
 			SpawnedAttackTarget->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, AttachSocketName);
-			SpawnedAttackTarget->SetAttackTargetRank(this, rRank);
+			SpawnedAttackTarget->SetAttackTargetRank(this, rRank, WeaponDamage);
 			SpawnedAttackTarget->Monster = this;
 
-			AttackTargetList.Add(SpawnedAttackTarget);
-			HavingTargetNum++;
+			// ✅ 절단 조건 처리 (예: 강한 공격이면 절단)
+			if (rRank >= 4)
+			{
+				SliceByBone(FName("spine_01"));
+			}
 
 			return SpawnedAttackTarget;
 		}
@@ -90,16 +98,10 @@ void AMonsterBase::SliceByBone(FName BoneName)
 		{
 			UpperPart->SetActorScale3D(GetActorScale3D());
 
+			// ✅ 정교하게 붙이려면 Bone의 Forward 방향으로 약간 이동도 고려 가능
 			// FVector AdjustedLoc = BoneLocation + GetActorForwardVector() * 10.f;
 			// UpperPart->SetActorLocation(AdjustedLoc);
 		}
 	}
-}
-
-void AMonsterBase::SetMonsterData(float _BaseDamage, float _MaxHealth)
-{
-	BaseDamage = _BaseDamage;
-	MaxHealth = _MaxHealth;
-	Health = MaxHealth;
 }
 
