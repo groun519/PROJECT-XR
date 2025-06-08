@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "WeaponData.h"
+#include "P_XR/Data/WeaponData.h"
 
 FWeaponInfo UWeaponData::FindWeaponForWeaponName(FName WeaponName)
 {

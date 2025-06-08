@@ -16,7 +16,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	void SetAttackTargetRank(AActor* TargetMonster, int32 rRank);
+	void SetAttackTargetRank(AActor* TargetMonster, int32 rRank, float WeaponDamage);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<AActor> Monster;

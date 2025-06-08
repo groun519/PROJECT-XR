@@ -20,7 +20,7 @@ void AAttackTargetActor::Tick(float DeltaTime)
 
 }
 
-void AAttackTargetActor::SetAttackTargetRank(AActor* TargetMonster, int32 rRank)
+void AAttackTargetActor::SetAttackTargetRank(AActor* TargetMonster, int32 rRank, float WeaponDamage)
 {
 	Monster = TargetMonster;
 	AttackTargetRank = rRank;
@@ -38,19 +38,19 @@ void AAttackTargetActor::SetAttackTargetRank(AActor* TargetMonster, int32 rRank)
 		// 
 		// Rank별 피해량은 피보나치 수열대로 이루어진다.
 		// 
-		// Rank 1 : 120%
-		// Rank 2 : 130%
-		// Rank 3 : 150%
-		// Rank 4 : 180%
-		// Rank 5 : 230%
-		// Rank 6 : 310%
-		// Rank 7 : 440%
+		// Rank 0 : 120%
+		// Rank 1 : 130%
+		// Rank 2 : 150%
+		// Rank 3 : 180%
+		// Rank 4 : 230%
+		// Rank 5 : 310%
+		// Rank 6 : 440%
 		// 
 		// 그러니 좋은 무기를 사용해야 한다!
 		// 
 		//	//	//	//
 	}
 
-	Damage = (1.f + static_cast<float>(preDamageCoeff) / 10.f);
+	Damage = WeaponDamage * (1.f + static_cast<float>(preDamageCoeff) / 100.f);
 }
 
