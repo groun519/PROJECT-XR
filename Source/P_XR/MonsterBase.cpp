@@ -90,7 +90,6 @@ void AMonsterBase::SliceByBone(FName BoneName)
 		{
 			UpperPart->SetActorScale3D(GetActorScale3D());
 
-			// ✅ 정교하게 붙이려면 Bone의 Forward 방향으로 약간 이동도 고려 가능
 			// FVector AdjustedLoc = BoneLocation + GetActorForwardVector() * 10.f;
 			// UpperPart->SetActorLocation(AdjustedLoc);
 		}
