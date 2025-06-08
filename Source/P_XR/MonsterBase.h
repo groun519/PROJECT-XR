@@ -47,6 +47,18 @@ struct FSkillMontageInfo
 	int32 CooldownCount = 0;
 };
 
+USTRUCT(BlueprintType)
+struct FAttackTargetList
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName BoneName = FName();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Rank = 0;
+};
+
 UCLASS()
 class P_XR_API AMonsterBase : public ACharacter
 {
@@ -75,37 +87,37 @@ public:
 	TObjectPtr<UMonsterData> MonsterData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MonsterRank = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BaseDamage = 10.f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrentDamage = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHealth = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Health = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterWidth = 0;
+	TArray<FAttackTargetList> TargetBones;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FAttackTargetList LastTargetBone;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterHeight_Head = 0;
+	TArray<TObjectPtr<AAttackTargetActor>> AttackTargetList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterHeight_Chest = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MonsterHeight_Leg = 0;
+	int32 HavingTargetNum = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AAttackTargetActor> AttackTargetClass;
 
 	UFUNCTION(BlueprintCallable)
-	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 WeaponRank, float WeaponDamage, bool bIsBackAttack, FName AttachSocketName);
+	AActor* SpawnAttackTargetByRank(FVector SpawnLoc, FRotator SpawnRot, int32 AttackTargetRank, FName AttachSocketName);
 
 	UFUNCTION(BlueprintCallable)
 	void SliceByBone(FName BoneName);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMonsterData(float _BaseDamage, float _MaxHealth);
 
 protected:
 	virtual void BeginPlay() override;
