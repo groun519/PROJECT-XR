@@ -14,6 +14,18 @@ enum class EMonsterType : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FAttackTargetInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName BoneName = FName();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Rank = 0;
+};
+
+USTRUCT(BlueprintType)
 struct FMonsterInfo
 {
 	GENERATED_BODY()
@@ -25,10 +37,22 @@ struct FMonsterInfo
 	EMonsterType MonsterType = EMonsterType::Humanoid;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
-	float MaxHP = 0.0f;
+	float MaxHealth = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
+	float BaseDamage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
 	float MaxSpeed = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
+	TArray<FAttackTargetInfo> TargetBones;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
+	FAttackTargetInfo LastBone;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData")
+	TObjectPtr<UStaticMesh> SlicingMesh = nullptr;
 
 	/*----------------------------------------------------------------------------*/
 
@@ -40,7 +64,6 @@ struct FMonsterInfo
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "MonsterData|NoneHumanoid Details", meta = (EditCondition = "bIsNoneHumanoid", EditConditionHides, DisplayName = "Max MP"))
 	float MaxMP = 0.0f;
 };
-
 
 
 /**

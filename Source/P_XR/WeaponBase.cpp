@@ -1,5 +1,5 @@
 ﻿#include "WeaponBase.h"
-#include "MonsterBase.h" // ✅ 몬스터 클래스 포함
+#include "MonsterBase.h" 
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -10,22 +10,12 @@ AWeaponBase::AWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
 	RootComponent = WeaponMesh;
-
-	TargetFinder = CreateDefaultSubobject<USphereComponent>(TEXT("TargetFinder"));
-	TargetFinder->SetSphereRadius(1000.0f);
-	TargetFinder->SetupAttachment(WeaponMesh);
 }
 
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ✅ 오버랩 이벤트 바인딩
-	if (TargetFinder)
-	{
-		TargetFinder->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnOverlapBegin);
-	}
 }
 
 // Called every frame
@@ -49,7 +39,7 @@ void AWeaponBase::SetWeaponData(float _Damage, float _TargetSpawnFrequency, int3
 	}
 }
 
-// ✅ 충돌 시 호출되는 절단 함수
+// 충돌 시 호출되는 절단 함수
 void AWeaponBase::TrySliceTarget(AActor* TargetActor)
 {
 	AMonsterBase* Monster = Cast<AMonsterBase>(TargetActor);
@@ -60,7 +50,7 @@ void AWeaponBase::TrySliceTarget(AActor* TargetActor)
 	}
 }
 
-// ✅ 오버랩 이벤트 핸들러
+// 오버랩 이벤트 핸들러
 void AWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
